@@ -70,7 +70,7 @@ body {
 st.markdown(page_bg, unsafe_allow_html=True)
 
 # 제목
-st.markdown("<h1 style='text-align:center; color:white;'>💼 MBTI 기반 직업 추천</h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align:center; color:black;'>💼 MBTI 기반 직업 추천</h1>", unsafe_allow_html=True)
 st.write(" ")
 
 # MBTI 선택
