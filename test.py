@@ -55,11 +55,11 @@ for relation in god_info["관계"]:
     label = "설화 있음" if story else ""
     graph.add_edge(selected_god, relation, label=label)
 
-pos = nx.spring_layout(graph, seed=42, k=0.5)  # k 값 줄여서 선 길이 단축
+pos = nx.spring_layout(graph, seed=42, k=0.3)  # 선 길이를 더 짧게
 plt.figure(figsize=(8,8))
-nx.draw(graph, pos, with_labels=True, node_color='lightyellow', node_size=2000, font_size=12, font_family="Malgun Gothic", fontweight='bold')
+nx.draw(graph, pos, with_labels=True, node_color='lightyellow', node_size=2000, font_size=12, font_family="DejaVu Sans", fontweight='bold')  # 한글/이모지 깨짐 방지
 labels = nx.get_edge_attributes(graph, 'label')
-nx.draw_networkx_edge_labels(graph, pos, edge_labels=labels, font_family="Malgun Gothic")
+nx.draw_networkx_edge_labels(graph, pos, edge_labels=labels, font_family="DejaVu Sans")
 st.pyplot(plt)
 
 # 관계 설화 표시
