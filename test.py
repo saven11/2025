@@ -1,6 +1,10 @@
 import streamlit as st
 import networkx as nx
 import matplotlib.pyplot as plt
+from matplotlib import font_manager, rc
+f_path = "c:/Windows/Fonts/malgun.ttf"
+font_name = font_manager.FontProperties(fname=f_path).get_name()
+rc('font', family=font_name)
 
 # 신 데이터 (영어 이름 + 이모지 포함)
 gods = {
