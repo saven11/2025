@@ -52,14 +52,16 @@ for relation in god_info["관계"]:
         continue
     graph.add_node(relation)
     story = myths.get((selected_god, relation)) or myths.get((relation, selected_god))
-    label = "설화 있음" if story else ""
+    label = story if story else ""
     graph.add_edge(selected_god, relation, label=label)
 
-pos = nx.spring_layout(graph, seed=42, k=0.15)  # 선 길이 더 짧게
+pos = nx.spring_layout(graph, seed=42, k=0.3)  # 선 길이 조정
 plt.figure(figsize=(8,8))
-nx.draw(graph, pos, with_labels=True, node_color='lightyellow', node_size=2000, font_size=12, font_family="DejaVu Sans", fontweight='bold')
-labels = nx.get_edge_attributes(graph, 'label')
-nx.draw_networkx_edge_labels(graph, pos, edge_labels=labels, font_family="DejaVu Sans")
+nx.draw_networkx_nodes(graph, pos, node_color='lightyellow', node_size=2000)
+nx.draw_networkx_labels(graph, pos, font_family="DejaVu Sans", font_weight='bold')
+edge_labels = nx.get_edge_attributes(graph, 'label')
+nx.draw_networkx_edge_labels(graph, pos, edge_labels=edge_labels, font_family="DejaVu Sans")
+nx.draw_networkx_edges(graph, pos)
 st.pyplot(plt)
 
 # 관계 설화 표시
