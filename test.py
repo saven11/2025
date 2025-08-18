@@ -1,4 +1,3 @@
-
 import streamlit as st
 import networkx as nx
 import matplotlib.pyplot as plt
@@ -18,7 +17,9 @@ gods = {
     "헤파이스토스 🔨": {"설명": "대장장이의 신, 불과 금속의 신.", "상징": "망치, 모루", "성격": "근면하고 창의적.", "관계": ["헤라 👑", "아프로디테 💖"]},
     "페르세포네 🌸": {"설명": "저승의 여왕이자 봄의 여신.", "상징": "석류", "성격": "순수하면서도 강함.", "관계": ["하데스 💀", "데메테르 🌾"]},
     "데메테르 🌾": {"설명": "농업과 풍요의 여신.", "상징": "곡식 이삭", "성격": "모성적이고 자애로움.", "관계": ["페르세포네 🌸"]},
-    "다프네 🌿": {"설명": "강의 신의 딸, 아폴론에게 쫓기다 월계수로 변함.", "상징": "월계수", "성격": "순결과 자유를 사랑함.", "관계": ["아폴론 🎶"]}
+    "다프네 🌿": {"설명": "강의 신의 딸, 아폴론에게 쫓기다 월계수로 변함.", "상징": "월계수", "성격": "순결과 자유를 사랑함.", "관계": ["아폴론 🎶"]},
+    "디오니소스 🍇": {"설명": "포도주와 축제의 신.", "상징": "포도, 와인잔", "성격": "쾌활하고 자유분방.", "관계": ["제우스 ⚡"]},
+    "헤카테 🌙": {"설명": "마법과 달, 밤의 여신.", "상징": "달, 지팡이", "성격": "신비롭고 독립적.", "관계": []}
 }
 
 # 관계별 설화 데이터
@@ -31,14 +32,11 @@ myths = {
     ("아폴론 🎶", "다프네 🌿"): "다프네가 월계수로 변한 이야기."
 }
 
-# 관계 유형별 색상
-relation_colors = {"배우자": "red", "부모-자식": "blue", "형제": "green", "연인": "purple", "기타": "gray"}
-
 # 앱 시작
 st.set_page_config(page_title="그리스 로마 신화 인물 사전", layout="wide")
 st.title("🏛️ 그리스 로마 신화 인물 사전")
 
-selected_god = st.selectbox("신을 선택하세요", list(gods.keys()))
+selected_god = st.selectbox("신을 선택하세요", sorted(list(gods.keys())))
 god_info = gods[selected_god]
 
 st.subheader(f"{selected_god}")
@@ -50,12 +48,14 @@ st.write(f"**성격:** {god_info['성격']}")
 graph = nx.Graph()
 graph.add_node(selected_god)
 for relation in god_info["관계"]:
+    if relation not in gods:
+        continue
     graph.add_node(relation)
     story = myths.get((selected_god, relation)) or myths.get((relation, selected_god))
     label = "설화 있음" if story else ""
     graph.add_edge(selected_god, relation, label=label)
 
-pos = nx.spring_layout(graph)
+pos = nx.spring_layout(graph, seed=42)
 plt.figure(figsize=(8,8))
 nx.draw(graph, pos, with_labels=True, node_color='lightyellow', node_size=2000, font_size=12, font_family="Malgun Gothic")
 labels = nx.get_edge_attributes(graph, 'label')
