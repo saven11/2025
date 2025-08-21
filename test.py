@@ -1,166 +1,135 @@
 import streamlit as st
 
-st.set_page_config(page_title="그리스 로마 신화", layout="wide")
-
-# 신 데이터 정의
-gods = [
-    {
+# 데이터 정의
+gods = {
+    "제우스": {
         "emoji": "⚡",
-        "en": "Zeus",
-        "kr": "제우스",
-        "desc": "올림포스 최고신, 하늘과 천둥의 신",
-        "story": "티탄을 무찌르고 올림포스의 주신이 됨",
-        "relation": "포세이돈과 하데스의 형제, 헤라의 남편",
-        "color": "#FFD700"
+        "english": "Zeus",
+        "description": "하늘과 번개의 신, 올림포스의 최고신",
+        "personality": "위엄 있고 권위적이며 정의를 중시하는 성격",
+        "myth": "티타노마키아에서 승리하여 올림포스의 지배자가 된 설화",
+        "relations": "헤라의 남편, 아테나의 아버지, 아폴론과 아르테미스의 아버지"
     },
-    {
-        "emoji": "🌊",
-        "en": "Poseidon",
-        "kr": "포세이돈",
-        "desc": "바다와 지진의 신",
-        "story": "삼지창으로 땅과 바다를 지배함",
-        "relation": "제우스와 하데스의 형제",
-        "color": "#1E90FF"
-    },
-    {
-        "emoji": "💀",
-        "en": "Hades",
-        "kr": "하데스",
-        "desc": "저승과 죽음의 신",
-        "story": "페르세포네를 아내로 맞아 저승의 왕이 됨",
-        "relation": "제우스와 포세이돈의 형제",
-        "color": "#2F4F4F"
-    },
-    {
+    "헤라": {
         "emoji": "👑",
-        "en": "Hera",
-        "kr": "헤라",
-        "desc": "결혼과 가정의 여신",
-        "story": "제우스의 아내로 여신들의 여왕",
-        "relation": "제우스의 아내, 아레스와 헤파이스토스의 어머니",
-        "color": "#FF69B4"
+        "english": "Hera",
+        "description": "결혼과 가정의 여신",
+        "personality": "자존심이 강하고 질투심이 많은 성격",
+        "myth": "트로이 전쟁의 원인이 된 파리스의 심판 설화",
+        "relations": "제우스의 아내, 아레스와 헤파이스토스의 어머니"
     },
-    {
-        "emoji": "🕊️",
-        "en": "Aphrodite",
-        "kr": "아프로디테",
-        "desc": "사랑과 아름다움의 여신",
-        "story": "바다의 거품에서 태어나 신과 인간을 매혹함",
-        "relation": "헤파이스토스의 아내, 에로스의 어머니",
-        "color": "#FFB6C1"
+    "포세이돈": {
+        "emoji": "🌊",
+        "english": "Poseidon",
+        "description": "바다와 지진의 신",
+        "personality": "거칠고 충동적이며 강력한 힘을 지닌 성격",
+        "myth": "아테네의 수호신 자리를 두고 아테나와 겨룬 설화",
+        "relations": "제우스와 하데스의 형제, 트리톤의 아버지"
     },
-    {
-        "emoji": "🛡️",
-        "en": "Ares",
-        "kr": "아레스",
-        "desc": "전쟁의 신",
-        "story": "아프로디테와의 사랑 이야기로 유명함",
-        "relation": "제우스와 헤라의 아들",
-        "color": "#DC143C"
+    "하데스": {
+        "emoji": "💀",
+        "english": "Hades",
+        "description": "저승과 죽음의 신",
+        "personality": "엄격하고 냉정하며 고독한 성격",
+        "myth": "페르세포네를 납치하여 저승의 여왕으로 삼은 설화",
+        "relations": "제우스와 포세이돈의 형제, 페르세포네의 남편"
     },
-    {
+    "아테나": {
         "emoji": "🦉",
-        "en": "Athena",
-        "kr": "아테나",
-        "desc": "지혜와 전쟁 전략의 여신",
-        "story": "제우스의 머리에서 갑옷을 입고 태어남",
-        "relation": "제우스의 딸",
-        "color": "#708090"
+        "english": "Athena",
+        "description": "지혜와 전쟁, 전략의 여신",
+        "personality": "이성적이고 침착하며 현명한 성격",
+        "myth": "제우스의 머리에서 완전무장한 모습으로 태어난 설화",
+        "relations": "제우스의 딸, 아폴론과 아르테미스와의 협력 관계"
     },
-    {
-        "emoji": "☀️",
-        "en": "Apollo",
-        "kr": "아폴론",
-        "desc": "태양, 음악과 예언의 신",
-        "story": "델포이 신탁의 주신으로 예언을 전함",
-        "relation": "아르테미스의 쌍둥이 오빠",
-        "color": "#FFA500"
+    "아폴론": {
+        "emoji": "🎶",
+        "english": "Apollo",
+        "description": "음악, 예언, 태양의 신",
+        "personality": "밝고 조화로우며 예술적 성향을 가진 성격",
+        "myth": "델피 신탁을 통해 예언을 전한 설화",
+        "relations": "제우스와 레토의 아들, 아르테미스의 쌍둥이 오빠"
     },
-    {
-        "emoji": "🌙",
-        "en": "Artemis",
-        "kr": "아르테미스",
-        "desc": "달과 사냥의 여신",
-        "story": "숲과 동물을 지키는 수호자",
-        "relation": "아폴론의 쌍둥이 여동생",
-        "color": "#87CEFA"
+    "아르테미스": {
+        "emoji": "🏹",
+        "english": "Artemis",
+        "description": "사냥과 달의 여신",
+        "personality": "자유롭고 강인하며 순결을 지키는 성격",
+        "myth": "악타이온을 사슴으로 만들어 죽게 한 설화",
+        "relations": "제우스와 레토의 딸, 아폴론의 쌍둥이 여동생"
     },
-    {
-        "emoji": "🛠️",
-        "en": "Hephaestus",
-        "kr": "헤파이스토스",
-        "desc": "불과 대장장이의 신",
-        "story": "올림포스의 무기와 갑옷을 만든 장인",
-        "relation": "헤라의 아들, 아프로디테의 남편",
-        "color": "#A0522D"
+    "아프로디테": {
+        "emoji": "🌹",
+        "english": "Aphrodite",
+        "description": "사랑과 미의 여신",
+        "personality": "매혹적이고 감각적이며 변덕스러운 성격",
+        "myth": "바다의 거품에서 태어난 설화",
+        "relations": "헤파이스토스의 아내, 에로스의 어머니"
     },
-    {
-        "emoji": "🍷",
-        "en": "Dionysus",
-        "kr": "디오니소스",
-        "desc": "술과 축제의 신",
-        "story": "인간들에게 포도주와 환희를 전함",
-        "relation": "제우스의 아들",
-        "color": "#800080"
+    "헤르메스": {
+        "emoji": "🪽",
+        "english": "Hermes",
+        "description": "상업, 여행, 도둑, 신들의 전령을 관장하는 신",
+        "personality": "영리하고 재치 있으며 빠른 행동을 보이는 성격",
+        "myth": "아폴론의 소를 훔치고 거문고를 발명한 설화",
+        "relations": "제우스와 마이아의 아들, 아프로디테와의 연관성"
     },
-    {
-        "emoji": "🕊️",
-        "en": "Hermes",
-        "kr": "헤르메스",
-        "desc": "상인, 여행자, 전령의 신",
-        "story": "신들의 전령으로 빠른 날개 달린 신발을 가짐",
-        "relation": "제우스의 아들",
-        "color": "#32CD32"
+    "헤파이스토스": {
+        "emoji": "🔥",
+        "english": "Hephaestus",
+        "description": "불과 대장장이의 신",
+        "personality": "끈기 있고 창조적이며 다소 거칠한 성격",
+        "myth": "올림포스의 무기와 도구를 제작한 설화",
+        "relations": "제우스와 헤라의 아들, 아프로디테의 남편"
     }
-]
+}
 
-st.title("🏛️ 그리스 로마 신화 인물 사전")
+# 앱 제목
+st.set_page_config(page_title="그리스 로마 신화 인물 사전", layout="wide")
+st.title("⚡ 그리스 로마 신화 인물 사전")
 
-# CSS 스타일 추가
-st.markdown(
-    """
+# CSS 스타일 (카드 디자인)
+st.markdown("""
     <style>
-    .scroll-container {
-        display: flex;
-        overflow-x: auto;
-        padding: 1rem;
-    }
     .card {
-        flex: 0 0 auto;
-        width: 250px;
-        margin-right: 1rem;
-        padding: 1rem;
+        background-color: #ffffff;
+        padding: 20px;
         border-radius: 15px;
-        color: white;
-        box-shadow: 2px 2px 10px rgba(0,0,0,0.3);
+        box-shadow: 2px 4px 12px rgba(0,0,0,0.15);
+        margin: 15px;
+        width: 300px;
+        display: inline-block;
+        vertical-align: top;
     }
-    .card h3 {
-        margin: 0 0 0.5rem 0;
-        font-size: 1.2rem;
+    .emoji {
+        font-size: 30px;
     }
-    .card p {
-        margin: 0.3rem 0;
-        font-size: 0.9rem;
+    .name {
+        font-size: 22px;
+        font-weight: bold;
+        margin-top: 10px;
+    }
+    .desc {
+        font-size: 16px;
+        margin-top: 8px;
+    }
+    .section {
+        font-size: 14px;
+        margin-top: 6px;
+        color: #444444;
     }
     </style>
-    """,
-    unsafe_allow_html=True
-)
+""", unsafe_allow_html=True)
 
-# 카드 UI 출력
-st.markdown('<div class="scroll-container">', unsafe_allow_html=True)
-
-for god in gods:
-    st.markdown(
-        f"""
-        <div class="card" style="background-color: {god['color']}">
-            <h3>{god['emoji']} {god['en']} {god['kr']}</h3>
-            <p><b>설명:</b> {god['desc']}</p>
-            <p><b>설화:</b> {god['story']}</p>
-            <p><b>관계:</b> {god['relation']}</p>
+# 카드 출력
+for god, info in gods.items():
+    st.markdown(f"""
+        <div class="card">
+            <div class="emoji">{info['emoji']}</div>
+            <div class="name">{info['english']} {god}</div>
+            <div class="desc">{info['description']}</div>
+            <div class="section"><b>성격:</b> {info['personality']}</div>
+            <div class="section"><b>관련 설화:</b> {info['myth']}</div>
+            <div class="section"><b>관계:</b> {info['relations']}</div>
         </div>
-        """,
-        unsafe_allow_html=True
-    )
-
-st.markdown('</div>', unsafe_allow_html=True)
+    """, unsafe_allow_html=True)
