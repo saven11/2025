@@ -88,7 +88,7 @@ choice = st.selectbox("신을 선택하세요", list(gods.keys()))
 god = gods[choice]
 
 # 출력
-st.header(f"{god['상징']} {god['영문']} {choice.split()[1]}")  # 이모지 + 영어이름 + 한글이름
+st.header(f"{god['상징']} {choice.split()[1]}")  # 이모지 + 영어이름 + 한글이름
 st.subheader("설화")
 st.write(god["설화"])
 
