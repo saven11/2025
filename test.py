@@ -129,19 +129,22 @@ st.markdown(f"""
 <style>
 .scroll-container {{
     display: flex;
+    justify-content: center;  /* 가운데 정렬 */
     overflow-x: auto;
-    padding: 1rem 0;
+    padding: 2rem 0;
 }}
 .card {{
-    flex: 0 0 300px;
-    margin-right: 1rem;
-    padding: 1rem;
+    flex: 0 0 350px;  /* 카드 크기 키움 */
+    margin-right: 1.5rem;
+    padding: 1.5rem;
     border-radius: 15px;
     background-color: {god['color']};
     color: white;
-    box-shadow: 2px 2px 12px rgba(0,0,0,0.3);
+    box-shadow: 2px 2px 16px rgba(0,0,0,0.4);
     position: relative;
+    min-height: 250px;
 }}
+
 .card::before {{
     content: "{god['border_left']}";
     position: absolute;
