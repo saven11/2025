@@ -133,41 +133,51 @@ st.markdown(f"""
     overflow-x: auto;
     padding: 2rem 0;
 }}
+# CSS + 카드 출력
+st.markdown(f"""
+<style>
+.scroll-container {{
+    display: flex;
+    justify-content: center;  /* 가운데 정렬 */
+    overflow-x: auto;
+    padding: 2rem 0;
+}}
 .card {{
-    flex: 0 0 350px;  /* 카드 크기 키움 */
+    flex: 0 0 450px;  /* 카드 너비 확대 */
     margin-right: 1.5rem;
-    padding: 1.5rem;
+    padding: 2rem;   /* 내부 여백 확대 */
     border-radius: 15px;
     background-color: {god['color']};
     color: white;
     box-shadow: 2px 2px 16px rgba(0,0,0,0.4);
     position: relative;
-    min-height: 250px;
+    min-height: 300px;  /* 높이 확대 */
 }}
 
 .card::before {{
     content: "{god['border_left']}";
     position: absolute;
-    left: -25px;
+    left: -30px;
     top: 50%;
     transform: translateY(-50%);
-    font-size: 24px;
+    font-size: 28px;
 }}
 .card::after {{
     content: "{god['border_right']}";
     position: absolute;
-    right: -25px;
+    right: -30px;
     top: 50%;
     transform: translateY(-50%);
-    font-size: 24px;
+    font-size: 28px;
 }}
 .card h3 {{
     margin-top: 0;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.8rem;
+    font-size: 1.6rem;  /* 제목 글씨 키움 */
 }}
 .card p {{
-    margin: 0.3rem 0;
-    font-size: 0.9rem;
+    margin: 0.5rem 0;
+    font-size: 1.1rem;  /* 본문 글씨 키움 */
 }}
 </style>
 
