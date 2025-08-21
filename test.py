@@ -1,71 +1,84 @@
 import streamlit as st
-import networkx as nx
-import matplotlib.pyplot as plt
 
-# 신 데이터 (영어 이름 + 이모지 포함)
-gods = {
-    "Zeus 제우스⚡": {"설명": "올림포스 최고 신, 하늘과 번개를 다스린다.", "상징": "번개, 독수리", "성격": "권위적이지만 변덕스러움.", "관계": ["Hera 👑", "Athena 🦉", "Apollo 🎶", "Artemis 🏹", "Ares 🗡️", "Aphrodite 💖", "Poseidon 🌊", "Hades 💀", "Hermes 🕊️", "Hephaestus 🔨"]},
-    "Hera 헤라 👑": {"설명": "결혼과 가정의 여신, 제우스의 아내.", "상징": "공작, 왕관", "성격": "질투심이 강하고 가정을 중시.", "관계": ["Zeus ⚡", "Ares 🗡️", "Hephaestus 🔨"]},
-    "Poseidon 포세이돈 🌊": {"설명": "바다의 신, 지진과 바다를 다스림.", "상징": "삼지창, 말", "성격": "거칠고 강력함.", "관계": ["Zeus ⚡", "Hades 💀"]},
-    "Hades 하데스 💀": {"설명": "저승의 신.", "상징": "케르베로스, 투구", "성격": "엄격하고 냉정함.", "관계": ["Zeus ⚡", "Poseidon 🌊", "Persephone 🌸"]},
-    "Athena 아테나 🦉": {"설명": "지혜와 전쟁 전략의 여신.", "상징": "부엉이, 방패", "성격": "지혜롭고 전략적.", "관계": ["Zeus ⚡", "Poseidon 🌊"]},
-    "Apollo 아폴로 🎶": {"설명": "음악과 태양, 예언의 신.", "상징": "리라, 태양", "성격": "예술적이고 자부심 강함.", "관계": ["Zeus ⚡", "Artemis 🏹", "Daphne 🌿"]},
-    "Artemis 아르테미스 🏹": {"설명": "사냥과 달의 여신.", "상징": "활, 사슴", "성격": "자유롭고 독립적.", "관계": ["Apollo 🎶"]},
-    "Ares 아레스 🗡️": {"설명": "전쟁의 신.", "상징": "창, 방패", "성격": "충동적이고 공격적.", "관계": ["Hera 👑", "Aphrodite 💖"]},
-    "Aphrodite 아프로디테 💖": {"설명": "사랑과 미의 여신.", "상징": "비둘기, 조개", "성격": "매혹적이고 자유분방.", "관계": ["Ares 🗡️", "Hephaestus 🔨"]},
-    "Hermes 헤르메스 🕊️": {"설명": "신들의 전령, 상업과 도둑의 수호신.", "상징": "날개 달린 신발, 지팡이", "성격": "영리하고 재치 있음.", "관계": ["Zeus ⚡"]},
-    "Hephaestus 헤파이스토스 🔨": {"설명": "대장장이의 신, 불과 금속의 신.", "상징": "망치, 모루", "성격": "근면하고 창의적.", "관계": ["Hera 👑", "Aphrodite 💖"]},
-    "Persephone 페르세포네 🌸": {"설명": "저승의 여왕이자 봄의 여신.", "상징": "석류", "성격": "순수하면서도 강함.", "관계": ["Hades 💀", "Demeter 🌾"]},
-    "Demeter 데메테르 🌾": {"설명": "농업과 풍요의 여신.", "상징": "곡식 이삭", "성격": "모성적이고 자애로움.", "관계": ["Persephone 🌸"]},
-    "Daphne 다프네 🌿": {"설명": "강의 신의 딸, 아폴론에게 쫓기다 월계수로 변함.", "상징": "월계수", "성격": "순결과 자유를 사랑함.", "관계": ["Apollo 🎶"]},
-    "Dionysus 디오니소스 🍇": {"설명": "포도주와 축제의 신.", "상징": "포도, 와인잔", "성격": "쾌활하고 자유분방.", "관계": ["Zeus ⚡"]},
-    "Hecate 헤카테 🌙": {"설명": "마법과 달, 밤의 여신.", "상징": "달, 지팡이", "성격": "신비롭고 독립적.", "관계": []}
+# 올림포스 12신 + 하데스 데이터
+myth_data = {
+    "제우스": {
+        "설화": "올림포스 12신의 왕으로, 하늘과 번개의 신이다. 크로노스를 무찌르고 올림포스를 지배하였다.",
+        "상징": "번개, 독수리, 왕좌",
+        "성격": "권위적이지만 정의를 중시하며, 때로는 감정적이다."
+    },
+    "헤라": {
+        "설화": "제우스의 아내이자 결혼과 가정의 여신으로, 질투심이 강하다.",
+        "상징": "공작, 왕관, 석류",
+        "성격": "품위 있고 당당하지만 질투심이 강하다."
+    },
+    "포세이돈": {
+        "설화": "바다와 지진의 신으로, 삼지창을 휘두르며 바다를 지배하였다.",
+        "상징": "삼지창, 말, 돌고래",
+        "성격": "격정적이고 변덕스럽지만 힘이 강하다."
+    },
+    "데메테르": {
+        "설화": "농업과 풍요의 여신으로, 딸 페르세포네를 그리워하다 계절이 생겨났다.",
+        "상징": "밀, 낫, 횃불",
+        "성격": "자애롭고 인내심이 깊지만 상실에 민감하다."
+    },
+    "아테나": {
+        "설화": "제우스의 머리에서 태어난 지혜와 전쟁의 여신이다. 아테네 도시의 수호신으로 숭배되었다.",
+        "상징": "올빼미, 방패, 올리브나무",
+        "성격": "지혜롭고 침착하며 전략적이다."
+    },
+    "아폴론": {
+        "설화": "태양, 음악, 예언의 신으로, 델포이 신탁의 주인이었다.",
+        "상징": "리라, 월계관, 태양",
+        "성격": "밝고 조화롭지만 자존심이 강하다."
+    },
+    "아르테미스": {
+        "설화": "사냥과 달의 여신으로, 아폴론의 쌍둥이 누이이다.",
+        "상징": "활, 사슴, 달",
+        "성격": "자유롭고 독립적이며 순결을 지킨다."
+    },
+    "아레스": {
+        "설화": "전쟁의 신으로, 피와 혼란을 즐긴다.",
+        "상징": "창, 방패, 전차",
+        "성격": "용맹하지만 충동적이고 호전적이다."
+    },
+    "아프로디테": {
+        "설화": "사랑과 미의 여신으로, 바다의 거품에서 태어났다고 전해진다.",
+        "상징": "조개껍질, 장미, 비둘기",
+        "성격": "매혹적이고 자유분방하며 감정에 솔직하다."
+    },
+    "헤파이스토스": {
+        "설화": "불과 대장장이의 신으로, 신들의 무기와 갑옷을 만들었다.",
+        "상징": "망치, 모루, 불",
+        "성격": "근면하고 창의적이지만 고독하다."
+    },
+    "헤르메스": {
+        "설화": "신들의 전령으로, 상업과 도둑, 여행자의 수호신이다.",
+        "상징": "날개 달린 신발, 지팡이, 거북이",
+        "성격": "영리하고 재치 있으며 교활하다."
+    },
+    "디오니소스": {
+        "설화": "포도주와 축제, 광란의 신으로, 인간에게 즐거움과 해방을 주었다.",
+        "상징": "포도, 잔, 덩굴",
+        "성격": "쾌활하고 자유분방하며 변덕스럽다."
+    },
+    "하데스": {
+        "설화": "죽은 자의 세계인 저승을 지배하는 신이다. 페르세포네를 납치하여 아내로 삼았다.",
+        "상징": "케르베로스, 투구, 황금홀",
+        "성격": "엄격하고 냉정하지만 의무를 다한다."
+    }
 }
 
-# 관계별 설화 데이터
-myths = {
-    ("Zeus ⚡", "Hera 👑"): "끝없는 부부 싸움과 질투 이야기.",
-    ("Zeus ⚡", "Athena 🦉"): "Zeus 머리에서 태어난 Athena.",
-    ("Hades 💀", "Persephone 🌸"): "저승 납치로 계절이 생긴 이야기.",
-    ("Apollo 🎶", "Artemis 🏹"): "쌍둥이 남매 이야기.",
-    ("Aphrodite 💖", "Ares 🗡️"): "밀회가 발각된 이야기.",
-    ("Apollo 🎶", "Daphne 🌿"): "Daphne가 월계수로 변한 이야기."
-}
+# 앱 제목
+st.title("⚡ 그리스·로마 신화 인물 도감")
 
-# 앱 시작
-st.set_page_config(page_title="그리스 로마 신화 인물 사전", layout="wide")
-st.title("🏛️ 그리스 로마 신화 인물 사전")
+# 인물 선택
+choice = st.selectbox("인물을 선택하세요:", list(myth_data.keys()))
 
-selected_god = st.selectbox("신을 선택하세요", sorted(list(gods.keys())))
-god_info = gods[selected_god]
+# 선택한 인물 정보 출력
+info = myth_data[choice]
 
-st.subheader(f"{selected_god}")
-st.write(f"**설명:** {god_info['설명']}")
-st.write(f"**상징:** {god_info['상징']}")
-st.write(f"**성격:** {god_info['성격']}")
-
-# 관계 시각화
-graph = nx.Graph()
-graph.add_node(selected_god)
-for relation in god_info["관계"]:
-    if relation not in gods:
-        continue
-    graph.add_node(relation)
-    story = myths.get((selected_god, relation)) or myths.get((relation, selected_god))
-    label = story if story else ""
-    graph.add_edge(selected_god, relation, label=label)
-
-pos = nx.spring_layout(graph, seed=42, k=0.3)  # 선 길이 조정
-plt.figure(figsize=(8,8))
-nx.draw_networkx_nodes(graph, pos, node_color='lightyellow', node_size=2000)
-nx.draw_networkx_labels(graph, pos, font_family="DejaVu Sans", font_weight='bold')
-edge_labels = nx.get_edge_attributes(graph, 'label')
-nx.draw_networkx_edge_labels(graph, pos, edge_labels=edge_labels, font_family="DejaVu Sans")
-nx.draw_networkx_edges(graph, pos)
-st.pyplot(plt)
-
-# 관계 설화 표시
-for relation in god_info["관계"]:
-    story = myths.get((selected_god, relation)) or myths.get((relation, selected_god))
-    if story:
-        st.markdown(f"**📖 {selected_god} ↔ {relation}**: {story}")
+st.subheader(f"✨ {choice}")
+st.write(f"**설화:** {info['설화']}")
+st.write(f"**상징:** {info['상징']}")
+st.write(f"**성격:** {info['성격']}")
