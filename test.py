@@ -133,15 +133,7 @@ st.markdown(f"""
     overflow-x: auto;
     padding: 2rem 0;
 }}
-# CSS + 카드 출력
-st.markdown(f"""
-<style>
-.scroll-container {{
-    display: flex;
-    justify-content: center;  /* 가운데 정렬 */
-    overflow-x: auto;
-    padding: 1rem 0;
-}}
+
 .card {{
     flex: 0 0 450px;  /* 카드 너비 확대 */
     margin-right: 1.5rem;
