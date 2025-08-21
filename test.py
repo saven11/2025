@@ -140,7 +140,7 @@ st.markdown(f"""
     display: flex;
     justify-content: center;  /* 가운데 정렬 */
     overflow-x: auto;
-    padding: 3rem 0;
+    padding: 1rem 0;
 }}
 .card {{
     flex: 0 0 450px;  /* 카드 너비 확대 */
