@@ -1,130 +1,166 @@
 import streamlit as st
 
-st.set_page_config(page_title="그리스 로마 신화 도감", layout="wide")
+st.set_page_config(page_title="그리스 로마 신화", layout="wide")
 
-# 신 데이터
-gods = {
-    "Zeus 제우스 ⚡": {
-        "성격": "권위적이고 정의로우며 때때로 충동적임",
-        "설화": "티탄을 무찌르고 올림포스의 주신이 됨",
-        "관계": "형제는 포세이돈, 하데스, 아내는 헤라",
-        "color": "#FFD700"  # 금색
+# 신 데이터 정의
+gods = [
+    {
+        "emoji": "⚡",
+        "en": "Zeus",
+        "kr": "제우스",
+        "desc": "올림포스 최고신, 하늘과 천둥의 신",
+        "story": "티탄을 무찌르고 올림포스의 주신이 됨",
+        "relation": "포세이돈과 하데스의 형제, 헤라의 남편",
+        "color": "#FFD700"
     },
-    "Hera 헤라 👑": {
-        "성격": "질투심이 강하지만 결혼과 가정을 중시함",
-        "설화": "제우스와의 갈등과 신들의 여왕으로서의 위상",
-        "관계": "남편은 제우스, 아들 아레스와 헤파이스토스의 어머니",
-        "color": "#DA70D6"  # 보라
+    {
+        "emoji": "🌊",
+        "en": "Poseidon",
+        "kr": "포세이돈",
+        "desc": "바다와 지진의 신",
+        "story": "삼지창으로 땅과 바다를 지배함",
+        "relation": "제우스와 하데스의 형제",
+        "color": "#1E90FF"
     },
-    "Poseidon 포세이돈 🌊": {
-        "성격": "격정적이고 집요함",
-        "설화": "바다의 지배자로서 트로이아 전쟁에 개입",
-        "관계": "형제는 제우스와 하데스",
-        "color": "#1E90FF"  # 파랑
+    {
+        "emoji": "💀",
+        "en": "Hades",
+        "kr": "하데스",
+        "desc": "저승과 죽음의 신",
+        "story": "페르세포네를 아내로 맞아 저승의 왕이 됨",
+        "relation": "제우스와 포세이돈의 형제",
+        "color": "#2F4F4F"
     },
-    "Hades 하데스 💀": {
-        "성격": "엄격하고 차갑지만 규칙을 중시함",
-        "설화": "페르세포네를 납치하여 명계의 여왕으로 삼음",
-        "관계": "형제는 제우스와 포세이돈, 아내는 페르세포네",
-        "color": "#2F4F4F"  # 짙은 회색
+    {
+        "emoji": "👑",
+        "en": "Hera",
+        "kr": "헤라",
+        "desc": "결혼과 가정의 여신",
+        "story": "제우스의 아내로 여신들의 여왕",
+        "relation": "제우스의 아내, 아레스와 헤파이스토스의 어머니",
+        "color": "#FF69B4"
     },
-    "Athena 아테나 🦉": {
-        "성격": "지혜롭고 침착하며 정의를 추구함",
-        "설화": "제우스의 머리에서 무장한 채 태어남",
-        "관계": "아버지는 제우스",
-        "color": "#708090"  # 슬레이트 그레이
+    {
+        "emoji": "🕊️",
+        "en": "Aphrodite",
+        "kr": "아프로디테",
+        "desc": "사랑과 아름다움의 여신",
+        "story": "바다의 거품에서 태어나 신과 인간을 매혹함",
+        "relation": "헤파이스토스의 아내, 에로스의 어머니",
+        "color": "#FFB6C1"
     },
-    "Apollo 아폴론 🎵": {
-        "성격": "예술적이고 이성적임",
-        "설화": "피톤을 물리치고 델포이 신탁의 주인이 됨",
-        "관계": "쌍둥이 여동생은 아르테미스",
-        "color": "#FFA500"  # 주황
+    {
+        "emoji": "🛡️",
+        "en": "Ares",
+        "kr": "아레스",
+        "desc": "전쟁의 신",
+        "story": "아프로디테와의 사랑 이야기로 유명함",
+        "relation": "제우스와 헤라의 아들",
+        "color": "#DC143C"
     },
-    "Artemis 아르테미스 🏹": {
-        "성격": "자유롭고 사냥을 사랑하며 순결을 중시함",
-        "설화": "사냥의 여신으로 오리온과 관련된 이야기",
-        "관계": "쌍둥이 오빠는 아폴론",
-        "color": "#32CD32"  # 라임그린
+    {
+        "emoji": "🦉",
+        "en": "Athena",
+        "kr": "아테나",
+        "desc": "지혜와 전쟁 전략의 여신",
+        "story": "제우스의 머리에서 갑옷을 입고 태어남",
+        "relation": "제우스의 딸",
+        "color": "#708090"
     },
-    "Ares 아레스 ⚔️": {
-        "성격": "호전적이고 충동적임",
-        "설화": "트로이아 전쟁에서 여러 차례 패배함",
-        "관계": "부모는 제우스와 헤라",
-        "color": "#B22222"  # 불타는 빨강
+    {
+        "emoji": "☀️",
+        "en": "Apollo",
+        "kr": "아폴론",
+        "desc": "태양, 음악과 예언의 신",
+        "story": "델포이 신탁의 주신으로 예언을 전함",
+        "relation": "아르테미스의 쌍둥이 오빠",
+        "color": "#FFA500"
     },
-    "Aphrodite 아프로디테 🌹": {
-        "성격": "매혹적이고 감정에 충실함",
-        "설화": "바다의 거품에서 태어나 아름다움의 여신이 됨",
-        "관계": "남편은 헤파이스토스, 연인은 아레스",
-        "color": "#FF69B4"  # 핑크
+    {
+        "emoji": "🌙",
+        "en": "Artemis",
+        "kr": "아르테미스",
+        "desc": "달과 사냥의 여신",
+        "story": "숲과 동물을 지키는 수호자",
+        "relation": "아폴론의 쌍둥이 여동생",
+        "color": "#87CEFA"
     },
-    "Hermes 헤르메스 🪶": {
-        "성격": "영리하고 장난기 많으며 신속함",
-        "설화": "태어난 지 하루 만에 아폴론의 가축을 훔침",
-        "관계": "아버지는 제우스, 어머니는 마이아",
-        "color": "#00CED1"  # 터키석
+    {
+        "emoji": "🛠️",
+        "en": "Hephaestus",
+        "kr": "헤파이스토스",
+        "desc": "불과 대장장이의 신",
+        "story": "올림포스의 무기와 갑옷을 만든 장인",
+        "relation": "헤라의 아들, 아프로디테의 남편",
+        "color": "#A0522D"
     },
-    "Hephaestus 헤파이스토스 🔨": {
-        "성격": "끈기 있고 성실하며 예술적 재능이 뛰어남",
-        "설화": "올림포스에서 떨어졌으나 불과 대장장이의 신이 됨",
-        "관계": "어머니는 헤라, 아내는 아프로디테",
-        "color": "#A0522D"  # 갈색
+    {
+        "emoji": "🍷",
+        "en": "Dionysus",
+        "kr": "디오니소스",
+        "desc": "술과 축제의 신",
+        "story": "인간들에게 포도주와 환희를 전함",
+        "relation": "제우스의 아들",
+        "color": "#800080"
     },
-    "Dionysus 디오니소스 🍇": {
-        "성격": "쾌활하고 창의적이며 때때로 광기에 휩싸임",
-        "설화": "포도주와 축제의 신으로 그리스 전역에서 숭배받음",
-        "관계": "아버지는 제우스, 어머니는 세멜레",
-        "color": "#800080"  # 보라
+    {
+        "emoji": "🕊️",
+        "en": "Hermes",
+        "kr": "헤르메스",
+        "desc": "상인, 여행자, 전령의 신",
+        "story": "신들의 전령으로 빠른 날개 달린 신발을 가짐",
+        "relation": "제우스의 아들",
+        "color": "#32CD32"
     }
-}
+]
 
-st.title("✨ 그리스 로마 신화 도감 ✨")
-st.markdown("가로 스크롤로 다양한 신들을 탐험해보세요!")
+st.title("🏛️ 그리스 로마 신화 인물 사전")
 
-# 가로 스크롤 컨테이너
+# CSS 스타일 추가
 st.markdown(
     """
     <style>
     .scroll-container {
         display: flex;
         overflow-x: auto;
-        padding: 20px 0;
+        padding: 1rem;
     }
     .card {
         flex: 0 0 auto;
-        width: 280px;
-        margin-right: 20px;
-        padding: 20px;
-        border-radius: 20px;
+        width: 250px;
+        margin-right: 1rem;
+        padding: 1rem;
+        border-radius: 15px;
         color: white;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-        backdrop-filter: blur(6px);
-        font-family: 'Arial', sans-serif;
+        box-shadow: 2px 2px 10px rgba(0,0,0,0.3);
     }
     .card h3 {
-        margin-top: 0;
-        font-size: 22px;
+        margin: 0 0 0.5rem 0;
+        font-size: 1.2rem;
     }
     .card p {
-        font-size: 14px;
-        line-height: 1.4;
+        margin: 0.3rem 0;
+        font-size: 0.9rem;
     }
     </style>
     """,
-    unsafe_allow_html=True,
+    unsafe_allow_html=True
 )
 
-# 카드 출력
-cards_html = '<div class="scroll-container">'
-for name, info in gods.items():
-    cards_html += f"""
-    <div class="card" style="background-color: {info['color']}CC;">
-        <h3>{name}</h3>
-        <p><b>성격:</b> {info['성격']}</p>
-        <p><b>설화:</b> {info['설화']}</p>
-        <p><b>관계:</b> {info['관계']}</p>
-    </div>
-    """
-cards_html += "</div>"
+# 카드 UI 출력
+st.markdown('<div class="scroll-container">', unsafe_allow_html=True)
 
-st.markdown(cards_html, unsafe_allow_html=True)
+for god in gods:
+    st.markdown(
+        f"""
+        <div class="card" style="background-color: {god['color']}">
+            <h3>{god['emoji']} {god['en']} {god['kr']}</h3>
+            <p><b>설명:</b> {god['desc']}</p>
+            <p><b>설화:</b> {god['story']}</p>
+            <p><b>관계:</b> {god['relation']}</p>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+st.markdown('</div>', unsafe_allow_html=True)
