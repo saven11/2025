@@ -266,14 +266,13 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# 중앙 카드 렌더링 (이미지 + 기본 정보)
+# 중앙 카드 렌더링 (기본 정보)
 st.markdown(
     f"""
     <div class="card-wrap">
         <div class="edge left">{info['edge_left']}</div>
         <div class="edge right">{info['edge_right']}</div>
         <div class="card">
-            <img class="hero" alt="{info['label']}">
             <h2>{info['label']}</h2>
             <p><b>상징:</b> {info['symbol']}</p>
             <p><b>성격:</b> {info['personality']}</p>
