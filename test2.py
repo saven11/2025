@@ -1,256 +1,323 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-  <meta charset="UTF-8">
-  <title>올림포스 12신</title>
-  <style>
-    body {
-      font-family: 'Noto Sans KR', sans-serif;
-      margin: 0;
-      background: #f9f9f9;
-      color: #333;
-      text-align: center;
+import streamlit as st
+
+st.set_page_config(page_title="올림포스 12신 카드", layout="centered")
+
+# 올림포스 12신 데이터 (영어 이름 먼저, 괄호 없음, 관계는 명사형/마침표 없음)
+gods = {
+    "Zeus": {
+        "label": "⚡ Zeus 제우스",
+        "color": "#FFD700",
+        "edge_left": "⚡",
+        "edge_right": "🦅",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/4/4a/Jupiter_Smyrna_Louvre_Ma13.jpg",
+        "symbol": "번개, 독수리, 왕좌",
+        "personality": "권위 중시, 정의 지향, 때로는 감정적",
+        "relations": "형제 포세이돈·하데스, 아내 헤라, 자녀 아테나·아폴론·아르테미스 등",
+        "myths": {
+            "탄생 설화": "크로노스와 레아의 막내아들로 태어나 크레타 동굴에서 자람. 유모 아말테이아의 염소젖으로 성장하여 아버지에게 삼켜진 형제들을 구출함",
+            "대표적인 신화": "티탄족과의 전쟁 티타노마키아 승리로 올림포스 통치 확보",
+            "다른 설화": "유럽을 납치한 백황소 이야기, 이오 이야기, 헤라클레스 탄생과 시련의 간접적 원인 제공"
+        }
+    },
+    "Hera": {
+        "label": "👑 Hera 헤라",
+        "color": "#FF69B4",
+        "edge_left": "🦚",
+        "edge_right": "💍",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/2/2d/Hera_Campana_Louvre_Ma2283.jpg",
+        "symbol": "공작, 왕관, 석류",
+        "personality": "품위와 자존, 강한 질투심",
+        "relations": "남편 제우스, 자녀 아레스·헤파이스토스·헤베",
+        "myths": {
+            "탄생 설화": "크로노스와 레아의 딸로 태어나 여신들의 여왕이 됨",
+            "대표적인 신화": "헤라클레스에게 12과업을 불러온 원한의 근원으로 등장",
+            "다른 설화": "파리스의 심판 사건에 관여, 일리아스에서 제우스를 유혹해 전장 교란"
+        }
+    },
+    "Poseidon": {
+        "label": "🌊 Poseidon 포세이돈",
+        "color": "#1E90FF",
+        "edge_left": "🐬",
+        "edge_right": "🌊",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/9/9d/Poseidon_sculpture_Copenhagen_2005.jpg",
+        "symbol": "삼지창, 말, 돌고래",
+        "personality": "격정과 변덕, 강한 자존",
+        "relations": "형제 제우스·하데스",
+        "myths": {
+            "탄생 설화": "크로노스와 레아의 아들로 태어나 제우스의 반란 이후 바다를 분점받음",
+            "대표적인 신화": "아테네 수호신 자리를 두고 아테나와 경쟁, 소금샘과 말의 창조로 겨루었으나 패배",
+            "다른 설화": "테세우스의 부친 전승, 트로이 전쟁에서 성벽을 무너뜨리거나 폭풍으로 그리스를 괴롭힘"
+        }
+    },
+    "Demeter": {
+        "label": "🌾 Demeter 데메테르",
+        "color": "#9ACD32",
+        "edge_left": "🌾",
+        "edge_right": "🌿",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/d/d0/Demeter_Altemps_Inv8605.jpg",
+        "symbol": "곡식 이삭, 낫, 횃불",
+        "personality": "자애와 인내, 상실에 민감",
+        "relations": "자녀 페르세포네, 형제 제우스·포세이돈·하데스",
+        "myths": {
+            "탄생 설화": "크로노스와 레아의 딸. 농경과 풍요 관장",
+            "대표적인 신화": "페르세포네 납치 설화와 엘레우시스 신비의 기원. 딸의 귀환 주기로 계절이 생김",
+            "다른 설화": "트립톨레모스에게 농사법 전수, 데모폰을 불로 단련해 불사의 존재로 만들려다 중단"
+        }
+    },
+    "Athena": {
+        "label": "🦉 Athena 아테나",
+        "color": "#708090",
+        "edge_left": "🛡️",
+        "edge_right": "🦉",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/f/fd/Mattei_Athena_Louvre_Ma530_n2.jpg",
+        "symbol": "올빼미, 올리브, 방패",
+        "personality": "지혜와 절제, 전략 중시",
+        "relations": "아버지 제우스",
+        "myths": {
+            "탄생 설화": "제우스가 메티스를 삼킨 뒤 머리를 가르자 완전무장한 상태로 탄생",
+            "대표적인 신화": "아테네 수호신으로 올리브나무 선물, 트로이 전쟁에서 그리스 편 지원",
+            "다른 설화": "아라크네와의 베짜기 대결, 팔라듐 수호상 전승"
+        }
+    },
+    "Apollo": {
+        "label": "☀️ Apollo 아폴론",
+        "color": "#FFA500",
+        "edge_left": "☀️",
+        "edge_right": "🎵",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/8/8d/Apollo_Belvedere_Vatican.jpg",
+        "symbol": "태양, 리라, 월계관",
+        "personality": "조화 추구, 예술과 질서 애호",
+        "relations": "쌍둥이 누이 아르테미스, 아버지 제우스",
+        "myths": {
+            "탄생 설화": "레토가 델로스 섬에서 아폴론과 아르테미스를 출산",
+            "대표적인 신화": "델포이의 피톤을 무찌르고 신탁 주관",
+            "다른 설화": "다프네 추격과 월계수 변신, 히아킨토스 비극, 마르시아스와의 음악 대결"
+        }
+    },
+    "Artemis": {
+        "label": "🌙 Artemis 아르테미스",
+        "color": "#87CEFA",
+        "edge_left": "🏹",
+        "edge_right": "🦌",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/4/4d/Diana_of_Versailles.jpg",
+        "symbol": "활, 사슴, 초승달",
+        "personality": "자유와 정결, 독립성",
+        "relations": "쌍둥이 오라버니 아폴론",
+        "myths": {
+            "탄생 설화": "레토와 제우스 사이에서 태어나 곧바로 산파 역할로 어머니를 돕는 능력 보여줌",
+            "대표적인 신화": "사냥꾼 악타이온을 사슴으로 변하게 함, 니오베의 자식들을 벌함",
+            "다른 설화": "오리온과의 인연과 별자리 이야기, 이피게네이아와 관련된 희생 전승"
+        }
+    },
+    "Ares": {
+        "label": "🗡️ Ares 아레스",
+        "color": "#B22222",
+        "edge_left": "🛡️",
+        "edge_right": "🗡️",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/3/3c/Ares_Ludovisi_Altemps_Inv8609.jpg",
+        "symbol": "창과 방패, 전차",
+        "personality": "충동과 호전성, 용맹",
+        "relations": "부모 제우스·헤라, 연인 아프로디테",
+        "myths": {
+            "탄생 설화": "제우스와 헤라 사이에서 태어난 전쟁의 화신",
+            "대표적인 신화": "헤파이스토스의 그물에 아프로디테와 함께 붙들려 조롱당함",
+            "다른 설화": "트로이 전쟁에서 다양한 전투 개입, 공포와 두려움의 의인화 포보스·데이모스 관련"
+        }
+    },
+    "Aphrodite": {
+        "label": "🌹 Aphrodite 아프로디테",
+        "color": "#FF1493",
+        "edge_left": "🌹",
+        "edge_right": "🕊️",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/2/23/Venus_de_Milo_Louvre_Ma399_n4.jpg",
+        "symbol": "장미, 비너스 조개, 비둘기",
+        "personality": "매혹과 설득, 자유분방한 정서",
+        "relations": "남편 헤파이스토스, 연인 아레스, 아들 에로스",
+        "myths": {
+            "탄생 설화": "우라노스의 바다 거품에서 태어났다는 전승 또는 제우스와 디오네의 딸 전승",
+            "대표적인 신화": "파리스의 심판에서 가장 아름다운 여신으로 선택되어 트로이 전쟁의 기폭제 마련",
+            "다른 설화": "아도니스 신화, 인간 목동 안키세스와의 사이에서 아이네이아스 출산"
+        }
+    },
+    "Hephaestus": {
+        "label": "🔨 Hephaestus 헤파이스토스",
+        "color": "#A0522D",
+        "edge_left": "🔨",
+        "edge_right": "🔥",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/c/c9/Hephaistos_Louvre_Ma13.jpg",
+        "symbol": "망치, 모루, 불",
+        "personality": "근면과 창의, 외유내강",
+        "relations": "어머니 헤라, 아내 아프로디테",
+        "myths": {
+            "탄생 설화": "추락으로 다리를 절게 되었다는 전승 존재. 헤라가 단독으로 낳았다는 전승",
+            "대표적인 신화": "아킬레우스의 방패와 신들의 무기 제작",
+            "다른 설화": "자율로 움직이는 자동인형과 황금의 하녀 제작, 판도라 창조 참여"
+        }
+    },
+    "Hermes": {
+        "label": "👟 Hermes 헤르메스",
+        "color": "#32CD32",
+        "edge_left": "👟",
+        "edge_right": "📨",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/d/d8/Hermes_Ingenui_Pio-Clementino_Inv544.jpg",
+        "symbol": "날개 달린 샌들, 카두케우스 지팡이",
+        "personality": "영리함과 재치, 기민한 행동",
+        "relations": "아버지 제우스, 어머니 마이아",
+        "myths": {
+            "탄생 설화": "동굴에서 태어나 그날로 장난과 기지가 드러남",
+            "대표적인 신화": "아폴론의 소를 훔치고 리라를 만들어 화해",
+            "다른 설화": "영혼 인도 역할, 오디세우스에게 몰리 허브 제공으로 키르케 마법 무력화"
+        }
+    },
+    "Dionysus": {
+        "label": "🍇 Dionysus 디오니소스",
+        "color": "#800080",
+        "edge_left": "🍇",
+        "edge_right": "🍷",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/5/5c/Dionysos_Louvre_Ma87_n2.jpg",
+        "symbol": "포도송이, 포도덩굴, 잔",
+        "personality": "쾌활과 해방, 광희와 변덕",
+        "relations": "아버지 제우스, 어머니 세멜레",
+        "myths": {
+            "탄생 설화": "세멜레가 소멸하자 제우스의 넓적다리에서 두 번째로 태어남",
+            "대표적인 신화": "바쿠스의 여인들과 펜테우스 비극, 미다스의 황금손 이야기",
+            "다른 설화": "해적들을 돌고래로 바꾸는 기적, 아리아드네 구출 후 별자리로 승천"
+        }
     }
-    h1 {
-      margin: 20px;
-      font-size: 2.2em;
-    }
-    .container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      gap: 40px;
-    }
-    .card {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      width: 70%;
-      max-width: 900px;
-      min-height: 320px;
-      border-radius: 20px;
-      box-shadow: 0 6px 16px rgba(0,0,0,0.2);
-      overflow: hidden;
-      background: white;
+}
+
+st.title("🏛️ 올림포스 12신 카드 백과")
+st.caption("카드에는 핵심 정보, 카드 바깥에는 탄생 설화·대표적인 신화·다른 설화가 나뉘어 표시됩니다")
+
+# 선택 박스: 라벨은 이모지 포함 전체 이름 사용
+options = [data["label"] for data in gods.values()]
+label_to_key = {gods[k]["label"]: k for k in gods}
+selected_label = st.selectbox("신을 선택하세요", options)
+key = label_to_key[selected_label]
+info = gods[key]
+
+# 동적 스타일 주입 (모든 CSS는 문자열로 감싸 SyntaxError 방지)
+st.markdown(
+    f"""
+    <style>
+    :root {{ --accent: {info['color']}; }}
+    .card-wrap {{
       position: relative;
-      margin: auto;
-    }
-    .card img {
-      width: 280px;
-      height: 280px;
+      width: 760px;
+      max-width: 92vw;
+      margin: 22px auto 10px auto;
+    }}
+    .card {{
+      background-color: var(--accent);
+      color: #ffffff;
+      border-radius: 22px;
+      padding: 24px 24px 18px 24px;
+      box-shadow: 0 12px 28px rgba(0,0,0,.25);
+      text-align: center;
+    }}
+    .hero {{
+      width: 100%;
+      max-height: 320px;
       object-fit: cover;
       border-radius: 16px;
-      margin: 20px;
-    }
-    .card-content {
-      flex: 1;
-      padding: 20px;
-      text-align: left;
-    }
-    .card h2 {
-      margin: 0;
-      font-size: 1.8em;
-    }
-    .relation, .myth {
-      margin-top: 10px;
-      font-size: 0.95em;
-      line-height: 1.5;
-    }
-    .emoji-left, .emoji-right {
+      margin-bottom: 12px;
+      box-shadow: 0 6px 18px rgba(0,0,0,.25);
+      border: 2px solid rgba(255,255,255,.35);
+    }}
+    .edge {{
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      font-size: 2em;
-    }
-    .emoji-left { left: 10px; }
-    .emoji-right { right: 10px; }
-    .extra-myth {
-      margin-top: 12px;
-      font-size: 0.9em;
+      font-size: 34px;
+      text-shadow: 0 2px 6px rgba(0,0,0,.25);
+    }}
+    .edge.left {{ left: -34px; }}
+    .edge.right {{ right: -34px; }}
+    .card h2 {{
+      margin: 8px 0 10px 0;
+      font-size: 30px;
+    }}
+    .card p {{
+      margin: 6px 0;
+      font-size: 16px;
+    }}
+    .section {{
+      max-width: 960px;
+      margin: 14px auto;
+      background: #ffffff;
+      border-left: 10px solid var(--accent);
+      padding: 14px 18px;
+      border-radius: 12px;
+      box-shadow: 0 6px 18px rgba(0,0,0,.08);
+    }}
+    .section h4 {{
+      margin: 0 0 6px 0;
+      font-size: 18px;
+      color: #222;
+    }}
+    .section p {{
+      margin: 0;
       color: #444;
-      font-style: italic;
-    }
-    footer {
-      margin: 40px;
-      font-size: 1.1em;
-    }
-    footer a {
-      color: #0077cc;
-      text-decoration: none;
-    }
-    footer a:hover {
-      text-decoration: underline;
-    }
-  </style>
-</head>
-<body>
-  <h1>올림포스 12신</h1>
-  <div class="container">
+      line-height: 1.55;
+    }}
+    .links {{
+      max-width: 960px;
+      margin: 18px auto 40px auto;
+      background: #f7f7fb;
+      border-left: 10px solid var(--accent);
+      padding: 14px 18px;
+      border-radius: 12px;
+      box-shadow: 0 6px 18px rgba(0,0,0,.06);
+    }}
+    .links a {{
+      display: inline-block;
+      margin-right: 12px;
+    }}
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
 
-    <!-- 제우스 -->
-    <div class="card" style="background:#fff8e1;">
-      <span class="emoji-left">⚡</span>
-      <img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Statue_of_Zeus.jpg" alt="Zeus">
-      <div class="card-content">
-        <h2>Zeus 제우스</h2>
-        <div class="relation">올림포스의 주신, 번개와 하늘의 지배자</div>
-        <div class="myth">티탄을 무찌르고 올림포스를 통치하게 됨</div>
-        <div class="extra-myth">대표 설화: 크로노스가 삼킨 형제자매들을 구출하고 올림포스의 왕이 됨</div>
-      </div>
-      <span class="emoji-right">🌩️</span>
+# 중앙 카드 렌더링 (이미지 + 기본 정보)
+st.markdown(
+    f"""
+    <div class="card-wrap">
+        <div class="edge left">{info['edge_left']}</div>
+        <div class="edge right">{info['edge_right']}</div>
+        <div class="card">
+            <img class="hero" src="{info['image']}" alt="{info['label']}">
+            <h2>{info['label']}</h2>
+            <p><b>상징:</b> {info['symbol']}</p>
+            <p><b>성격:</b> {info['personality']}</p>
+            <p><b>관계:</b> {info['relations']}</p>
+        </div>
     </div>
+    """,
+    unsafe_allow_html=True,
+)
 
-    <!-- 헤라 -->
-    <div class="card" style="background:#fde0dc;">
-      <span class="emoji-left">👑</span>
-      <img src="https://upload.wikimedia.org/wikipedia/commons/2/2d/Hera_Campana_Louvre_Ma2283.jpg" alt="Hera">
-      <div class="card-content">
-        <h2>Hera 헤라</h2>
-        <div class="relation">결혼과 가정의 여신, 제우스의 아내</div>
-        <div class="myth">질투심으로 많은 영웅을 괴롭힘</div>
-        <div class="extra-myth">대표 설화: 헤라클레스에게 12과업을 지시하도록 만듦</div>
-      </div>
-      <span class="emoji-right">💍</span>
+# 카드 바깥: 항목별 설화 박스
+st.subheader("📚 다른 설화")
+for section, text in info["myths"].items():
+    st.markdown(
+        f"""
+        <div class="section">
+            <h4>📖 {section}</h4>
+            <p>{text}</p>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+# 하단 참고 링크 (저작권 안전/학습용)
+st.markdown(
+    """
+    <div class="links">
+      <b>더 알아보기</b> ·
+      <a href="https://www.theoi.com/" target="_blank">Theoi Project</a>
+      <a href="https://ko.wikipedia.org/wiki/%EA%B7%B8%EB%A6%AC%EC%8A%A4_%EC%8B%A0%ED%99%94" target="_blank">위키백과: 그리스 신화</a>
+      <a href="https://www.perseus.tufts.edu/" target="_blank">Perseus Digital Library</a>
     </div>
-
-    <!-- 포세이돈 -->
-    <div class="card" style="background:#e0f7fa;">
-      <span class="emoji-left">🌊</span>
-      <img src="https://upload.wikimedia.org/wikipedia/commons/9/9d/Poseidon_sculpture_Copenhagen_2005.jpg" alt="Poseidon">
-      <div class="card-content">
-        <h2>Poseidon 포세이돈</h2>
-        <div class="relation">바다와 지진의 신, 제우스의 형제</div>
-        <div class="myth">삼지창으로 바다를 다스림</div>
-        <div class="extra-myth">대표 설화: 아테나와 아테네 도시 수호권을 놓고 다툼</div>
-      </div>
-      <span class="emoji-right">🔱</span>
-    </div>
-
-    <!-- 아테나 -->
-    <div class="card" style="background:#e8f5e9;">
-      <span class="emoji-left">🦉</span>
-      <img src="https://upload.wikimedia.org/wikipedia/commons/f/fd/Mattei_Athena_Louvre_Ma530_n2.jpg" alt="Athena">
-      <div class="card-content">
-        <h2>Athena 아테나</h2>
-        <div class="relation">지혜와 전쟁 전략의 여신</div>
-        <div class="myth">제우스의 머리에서 탄생함</div>
-        <div class="extra-myth">대표 설화: 아라크네와의 직조 대결에서 아라크네를 거미로 변하게 함</div>
-      </div>
-      <span class="emoji-right">⚔️</span>
-    </div>
-
-    <!-- 아폴론 -->
-    <div class="card" style="background:#fff3e0;">
-      <span class="emoji-left">🎶</span>
-      <img src="https://upload.wikimedia.org/wikipedia/commons/8/8d/Apollo_Belvedere_Vatican.jpg" alt="Apollo">
-      <div class="card-content">
-        <h2>Apollo 아폴론</h2>
-        <div class="relation">빛, 음악, 예언의 신</div>
-        <div class="myth">델포이 신탁을 주관함</div>
-        <div class="extra-myth">대표 설화: 다프네를 사랑했으나 월계수 나무로 변해버림</div>
-      </div>
-      <span class="emoji-right">☀️</span>
-    </div>
-
-    <!-- 아르테미스 -->
-    <div class="card" style="background:#f3e5f5;">
-      <span class="emoji-left">🏹</span>
-      <img src="https://upload.wikimedia.org/wikipedia/commons/4/4d/Diana_of_Versailles.jpg" alt="Artemis">
-      <div class="card-content">
-        <h2>Artemis 아르테미스</h2>
-        <div class="relation">사냥과 달의 여신, 아폴론의 쌍둥이</div>
-        <div class="myth">순결과 자연을 수호함</div>
-        <div class="extra-myth">대표 설화: 액타이온이 그녀를 엿보아 사슴으로 변해 개들에게 찢김</div>
-      </div>
-      <span class="emoji-right">🌙</span>
-    </div>
-
-    <!-- 아레스 -->
-    <div class="card" style="background:#ffebee;">
-      <span class="emoji-left">🛡️</span>
-      <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Ares_Ludovisi_Altemps_Inv8609.jpg" alt="Ares">
-      <div class="card-content">
-        <h2>Ares 아레스</h2>
-        <div class="relation">전쟁과 파괴의 신</div>
-        <div class="myth">아프로디테와 연인 관계</div>
-        <div class="extra-myth">대표 설화: 헤파이스토스에게 두 연인이 덫에 걸려 망신당함</div>
-      </div>
-      <span class="emoji-right">⚔️</span>
-    </div>
-
-    <!-- 아프로디테 -->
-    <div class="card" style="background:#fce4ec;">
-      <span class="emoji-left">🌹</span>
-      <img src="https://upload.wikimedia.org/wikipedia/commons/2/23/Venus_de_Milo_Louvre_Ma399_n4.jpg" alt="Aphrodite">
-      <div class="card-content">
-        <h2>Aphrodite 아프로디테</h2>
-        <div class="relation">사랑과 미의 여신</div>
-        <div class="myth">바다 거품에서 태어남</div>
-        <div class="extra-myth">대표 설화: 트로이 전쟁의 발단이 된 파리스의 황금사과 심판</div>
-      </div>
-      <span class="emoji-right">💖</span>
-    </div>
-
-    <!-- 헤르메스 -->
-    <div class="card" style="background:#e8eaf6;">
-      <span class="emoji-left">🪽</span>
-      <img src="https://upload.wikimedia.org/wikipedia/commons/d/d8/Hermes_Ingenui_Pio-Clementino_Inv544.jpg" alt="Hermes">
-      <div class="card-content">
-        <h2>Hermes 헤르메스</h2>
-        <div class="relation">전령과 상업, 도둑의 신</div>
-        <div class="myth">날개 달린 샌들로 신들의 전령 역할</div>
-        <div class="extra-myth">대표 설화: 태어나자마자 소를 훔치고 거북 껍질로 리라를 발명</div>
-      </div>
-      <span class="emoji-right">📜</span>
-    </div>
-
-    <!-- 헤파이스토스 -->
-    <div class="card" style="background:#fbe9e7;">
-      <span class="emoji-left">🔥</span>
-      <img src="https://upload.wikimedia.org/wikipedia/commons/c/c9/Hephaistos_Louvre_Ma13.jpg" alt="Hephaestus">
-      <div class="card-content">
-        <h2>Hephaestus 헤파이스토스</h2>
-        <div class="relation">불과 대장장이의 신</div>
-        <div class="myth">신들의 무기를 제작함</div>
-        <div class="extra-myth">대표 설화: 제우스의 머리를 도끼로 쪼개 아테나가 태어나게 도움</div>
-      </div>
-      <span class="emoji-right">⚒️</span>
-    </div>
-
-    <!-- 데메테르 -->
-    <div class="card" style="background:#f1f8e9;">
-      <span class="emoji-left">🌾</span>
-      <img src="https://upload.wikimedia.org/wikipedia/commons/d/d0/Demeter_Altemps_Inv8605.jpg" alt="Demeter">
-      <div class="card-content">
-        <h2>Demeter 데메테르</h2>
-        <div class="relation">농업과 풍요의 여신</div>
-        <div class="myth">딸 페르세포네를 잃고 계절이 생김</div>
-        <div class="extra-myth">대표 설화: 페르세포네가 하데스와 지하세계에 머물며 계절의 순환이 시작됨</div>
-      </div>
-      <span class="emoji-right">🍎</span>
-    </div>
-
-    <!-- 디오니소스 -->
-    <div class="card" style="background:#ede7f6;">
-      <span class="emoji-left">🍇</span>
-      <img src="https://upload.wikimedia.org/wikipedia/commons/5/5c/Dionysos_Louvre_Ma87_n2.jpg" alt="Dionysus">
-      <div class="card-content">
-        <h2>Dionysus 디오니소스</h2>
-        <div class="relation">포도주와 축제의 신</div>
-        <div class="myth">술과 광기의 힘을 부여함</div>
-        <div class="extra-myth">대표 설화: 미다스 왕에게 만지는 것을 황금으로 바꾸는 능력을 줌</div>
-      </div>
-      <span class="emoji-right">🍷</span>
-    </div>
-
-  </div>
-
-  <footer>
-    더 알아보기: 
-    <a href="https://ko.wikipedia.org/wiki/%EA%B7%B8%EB%A6%AC%EC%8A%A4_%EC%8B%A0%ED%99%94" target="_blank">
-      위키백과 - 그리스 신화
-    </a>
-  </footer>
-</body>
-</html>
+    """,
+    unsafe_allow_html=True,
+)
