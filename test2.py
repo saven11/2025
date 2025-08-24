@@ -9,7 +9,6 @@ gods = {
         "color": "#FFD700",
         "edge_left": "⚡",
         "edge_right": "🦅",
-        "image": "https://upload.wikimedia.org/wikipedia/commons/4/4a/Jupiter_Smyrna_Louvre_Ma13.jpg",
         "symbol": "번개, 독수리, 왕좌",
         "personality": "권위 중시, 정의 지향, 때로는 감정적",
         "relations": "형제 포세이돈·하데스, 아내 헤라, 자녀 아테나·아폴론·아르테미스 등",
@@ -24,7 +23,6 @@ gods = {
         "color": "#FF69B4",
         "edge_left": "🦚",
         "edge_right": "💍",
-        "image": "https://upload.wikimedia.org/wikipedia/commons/2/2d/Hera_Campana_Louvre_Ma2283.jpg",
         "symbol": "공작, 왕관, 석류",
         "personality": "품위와 자존, 강한 질투심",
         "relations": "남편 제우스, 자녀 아레스·헤파이스토스·헤베",
@@ -39,7 +37,6 @@ gods = {
         "color": "#1E90FF",
         "edge_left": "🐬",
         "edge_right": "🌊",
-        "image": "https://upload.wikimedia.org/wikipedia/commons/9/9d/Poseidon_sculpture_Copenhagen_2005.jpg",
         "symbol": "삼지창, 말, 돌고래",
         "personality": "격정과 변덕, 강한 자존",
         "relations": "형제 제우스·하데스",
@@ -54,7 +51,6 @@ gods = {
         "color": "#9ACD32",
         "edge_left": "🌾",
         "edge_right": "🌿",
-        "image": "https://upload.wikimedia.org/wikipedia/commons/d/d0/Demeter_Altemps_Inv8605.jpg",
         "symbol": "곡식 이삭, 낫, 횃불",
         "personality": "자애와 인내, 상실에 민감",
         "relations": "자녀 페르세포네, 형제 제우스·포세이돈·하데스",
@@ -69,7 +65,6 @@ gods = {
         "color": "#708090",
         "edge_left": "🛡️",
         "edge_right": "🦉",
-        "image": "https://upload.wikimedia.org/wikipedia/commons/f/fd/Mattei_Athena_Louvre_Ma530_n2.jpg",
         "symbol": "올빼미, 올리브, 방패",
         "personality": "지혜와 절제, 전략 중시",
         "relations": "아버지 제우스",
@@ -84,7 +79,6 @@ gods = {
         "color": "#FFA500",
         "edge_left": "☀️",
         "edge_right": "🎵",
-        "image": "https://upload.wikimedia.org/wikipedia/commons/8/8d/Apollo_Belvedere_Vatican.jpg",
         "symbol": "태양, 리라, 월계관",
         "personality": "조화 추구, 예술과 질서 애호",
         "relations": "쌍둥이 누이 아르테미스, 아버지 제우스",
@@ -99,7 +93,6 @@ gods = {
         "color": "#87CEFA",
         "edge_left": "🏹",
         "edge_right": "🦌",
-        "image": "https://upload.wikimedia.org/wikipedia/commons/4/4d/Diana_of_Versailles.jpg",
         "symbol": "활, 사슴, 초승달",
         "personality": "자유와 정결, 독립성",
         "relations": "쌍둥이 오라버니 아폴론",
@@ -114,7 +107,6 @@ gods = {
         "color": "#B22222",
         "edge_left": "🛡️",
         "edge_right": "🗡️",
-        "image": "https://upload.wikimedia.org/wikipedia/commons/3/3c/Ares_Ludovisi_Altemps_Inv8609.jpg",
         "symbol": "창과 방패, 전차",
         "personality": "충동과 호전성, 용맹",
         "relations": "부모 제우스·헤라, 연인 아프로디테",
@@ -129,7 +121,6 @@ gods = {
         "color": "#FF1493",
         "edge_left": "🌹",
         "edge_right": "🕊️",
-        "image": "https://upload.wikimedia.org/wikipedia/commons/2/23/Venus_de_Milo_Louvre_Ma399_n4.jpg",
         "symbol": "장미, 비너스 조개, 비둘기",
         "personality": "매혹과 설득, 자유분방한 정서",
         "relations": "남편 헤파이스토스, 연인 아레스, 아들 에로스",
@@ -144,7 +135,6 @@ gods = {
         "color": "#A0522D",
         "edge_left": "🔨",
         "edge_right": "🔥",
-        "image": "https://upload.wikimedia.org/wikipedia/commons/c/c9/Hephaistos_Louvre_Ma13.jpg",
         "symbol": "망치, 모루, 불",
         "personality": "근면과 창의, 외유내강",
         "relations": "어머니 헤라, 아내 아프로디테",
@@ -159,7 +149,6 @@ gods = {
         "color": "#32CD32",
         "edge_left": "👟",
         "edge_right": "📨",
-        "image": "https://upload.wikimedia.org/wikipedia/commons/d/d8/Hermes_Ingenui_Pio-Clementino_Inv544.jpg",
         "symbol": "날개 달린 샌들, 카두케우스 지팡이",
         "personality": "영리함과 재치, 기민한 행동",
         "relations": "아버지 제우스, 어머니 마이아",
@@ -174,7 +163,6 @@ gods = {
         "color": "#800080",
         "edge_left": "🍇",
         "edge_right": "🍷",
-        "image": "https://upload.wikimedia.org/wikipedia/commons/5/5c/Dionysos_Louvre_Ma87_n2.jpg",
         "symbol": "포도송이, 포도덩굴, 잔",
         "personality": "쾌활과 해방, 광희와 변덕",
         "relations": "아버지 제우스, 어머니 세멜레",
@@ -186,7 +174,7 @@ gods = {
     }
 }
 
-st.title("🏛️ 올림포스 12신 카드 백과")
+st.title("🏛️ 그리스 로마 신화 올림포스 12신 백과")
 st.caption("카드에는 핵심 정보, 카드 바깥에는 탄생 설화·대표적인 신화·다른 설화가 나뉘어 표시됩니다")
 
 # 선택 박스: 라벨은 이모지 포함 전체 이름 사용
@@ -285,7 +273,7 @@ st.markdown(
         <div class="edge left">{info['edge_left']}</div>
         <div class="edge right">{info['edge_right']}</div>
         <div class="card">
-            <img class="hero" src="{info['image']}" alt="{info['label']}">
+            <img class="hero" alt="{info['label']}">
             <h2>{info['label']}</h2>
             <p><b>상징:</b> {info['symbol']}</p>
             <p><b>성격:</b> {info['personality']}</p>
