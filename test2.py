@@ -2,7 +2,7 @@ import streamlit as st
 
 st.set_page_config(page_title="올림포스 12신 카드", layout="centered")
 
-# 올림포스 12신 데이터 (영어 이름 먼저, 괄호 없음, 관계는 명사형/마침표 없음)
+# 올림포스 12신 데이터
 gods = {
     "Zeus": {
         "label": "⚡ Zeus 제우스",
@@ -184,7 +184,7 @@ selected_label = st.selectbox("신을 선택하세요", options)
 key = label_to_key[selected_label]
 info = gods[key]
 
-# 동적 스타일 주입 (모든 CSS는 문자열로 감싸 SyntaxError 방지)
+# 동적 스타일 주입
 st.markdown(
     f"""
     <style>
@@ -266,7 +266,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# 중앙 카드 렌더링 (기본 정보)
+# 중앙 카드 렌더링 (기본 정보 키워드)
 st.markdown(
     f"""
     <div class="card-wrap">
@@ -296,7 +296,7 @@ for section, text in info["myths"].items():
         unsafe_allow_html=True,
     )
 
-# 하단 참고 링크 (저작권 안전/학습용)
+# 하단 참고 링크
 st.markdown(
     """
     <div class="links">
