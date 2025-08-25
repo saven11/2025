@@ -1,8 +1,9 @@
-import streamlit as st
+import streamlit as st # 라이브러리 불러오기
 
-st.set_page_config(page_title="올림포스 12신 카드", layout="centered")
+st.set_page_config(page_title="올림포스 12신 카드", layout="centered") # 페이지 기본 설정
 
-# 올림포스 12신 데이터
+# 올림포스 12신 데이터 정의
+# 각 신의 이름은 key, 그 아래 속성을 값으로 저장
 gods = {
     "Zeus": {
         "label": "⚡ Zeus 제우스",
@@ -174,126 +175,144 @@ gods = {
     }
 }
 
+# 앱 제목과 캡션 표시
 st.title("🏛️ 올림포스 12신 백과사전 🏛️")
 st.caption("카드에는 핵심 정보, 카드 바깥에는 탄생 설화·대표적인 신화·다른 설화가 나뉘어 표시됩니다")
 
-# 선택 박스: 라벨은 이모지 포함 전체 이름 사용
+# 선택 박스(selectbox)에 표시할 옵션 준비
+# gods 딕셔너리에서 각 신의 label만 추출해 리스트 생성
 options = [data["label"] for data in gods.values()]
+
+# label(이모지+이름)과 실제 key(Zeus, Hera 등) 딕셔너리 생성
 label_to_key = {gods[k]["label"]: k for k in gods}
-selected_label = st.selectbox("신을 선택하세요", options)
+selected_label = st.selectbox("신을 선택하세요", options) # 사용자가 신을 선
+
+# 선택된 신의 key와 데이터 가져오기
 key = label_to_key[selected_label]
 info = gods[key]
 
 # 동적 스타일 주입
+# 선택된 신의 색상 정보 기반 CSS 스타일 삽입 # CSS를 통해 카드 디자인, 박스, 링크 스타일 지정
+# 카드 모양, 그림자, 여백, section 박스, 링크 스타일 등을 HTML/CSS로 꾸밈
+
+# st.markdown : Streamlit 앱 안에서 텍스트를 예쁘게 표시하거나, HTML/CSS를 직접 넣어서 UI를 꾸미는 함수
+# HTML → <div>, <h2>, <p> 같은 태그로 "카드 구조"를 만듦
+# CSS → 색상, 그림자, 글자 크기 등으로 카드를 예쁘게 꾸밈
+# CSS 스타일을 Streamlit 앱 안에 삽입
 st.markdown(
     f"""
     <style>
-    :root {{ --accent: {info['color']}; }}
+    :root {{ --accent: {info['color']}; }} /* 선택된 신의 색상을 CSS 변수(--accent)에 저장 */
+    
     .card-wrap {{
-      position: relative;
-      width: 760px;
-      max-width: 92vw;
-      margin: 22px auto 10px auto;
+      position: relative;          /* 내부 요소 위치 기준이 되는 컨테이너 */
+      width: 760px;                /* 카드 최대 너비 */
+      max-width: 92vw;             /* 화면이 좁으면 92%까지만 줄어들게 */
+      margin: 22px auto 10px auto; /* 위쪽/아래쪽 여백, 가운데 정렬 */
     }}
+    
     .card {{
-      background-color: var(--accent);
-      color: #ffffff;
-      border-radius: 22px;
-      padding: 24px 24px 18px 24px;
-      box-shadow: 0 12px 28px rgba(0,0,0,.25);
-      text-align: center;
+      background-color: var(--accent); /* 카드 배경색 = 선택된 신의 색상 */
+      color: #ffffff;                  /* 글씨 색: 흰색 */
+      border-radius: 22px;             /* 모서리 둥글게 */
+      padding: 24px 24px 18px 24px;    /* 안쪽 여백 */
+      box-shadow: 0 12px 28px rgba(0,0,0,.25); /* 그림자 효과 */
+      text-align: center;              /* 텍스트 가운데 정렬 */
     }}
-    .hero {{
-      width: 100%;
-      max-height: 320px;
-      object-fit: cover;
-      border-radius: 16px;
-      margin-bottom: 12px;
-      box-shadow: 0 6px 18px rgba(0,0,0,.25);
-      border: 2px solid rgba(255,255,255,.35);
-    }}
+    
     .edge {{
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 34px;
-      text-shadow: 0 2px 6px rgba(0,0,0,.25);
+      position: absolute;              /* 부모(.card-wrap)를 기준으로 절대 위치 */
+      top: 50%;                        /* 세로 가운데 */
+      transform: translateY(-50%);     /* 정확히 중앙 정렬 */
+      font-size: 34px;                 /* 아이콘 크기 */
+      text-shadow: 0 2px 6px rgba(0,0,0,.25); /* 이모지에 그림자 */
     }}
-    .edge.left {{ left: -34px; }}
-    .edge.right {{ right: -34px; }}
+    
+    .edge.left {{ left: -34px; }}  /* 카드 왼쪽에 붙는 아이콘 위치 */
+    .edge.right {{ right: -34px; }}/* 카드 오른쪽에 붙는 아이콘 위치 */
+    
     .card h2 {{
-      margin: 8px 0 10px 0;
-      font-size: 30px;
+      margin: 8px 0 10px 0;  /* 제목 위아래 여백 */
+      font-size: 30px;       /* 제목 글자 크기 */
     }}
+    
     .card p {{
-      margin: 6px 0;
-      font-size: 16px;
+      margin: 6px 0;         /* 문단 여백 */
+      font-size: 16px;       /* 문단 글자 크기 */
     }}
+    
     .section {{
-      max-width: 960px;
-      margin: 14px auto;
-      background: #ffffff;
-      border-left: 10px solid var(--accent);
-      padding: 14px 18px;
-      border-radius: 12px;
-      box-shadow: 0 6px 18px rgba(0,0,0,.08);
+      max-width: 960px;                       /* 설화 박스 최대 너비 */
+      margin: 14px auto;                      /* 가운데 정렬 + 위아래 여백 */
+      background: #ffffff;                    /* 배경: 흰색 */
+      border-left: 10px solid var(--accent);  /* 왼쪽에 굵은 컬러 라인 */
+      padding: 14px 18px;                     /* 안쪽 여백 */
+      border-radius: 12px;                    /* 모서리 둥글게 */
+      box-shadow: 0 6px 18px rgba(0,0,0,.08); /* 살짝 그림자 */
     }}
+    
     .section h4 {{
-      margin: 0 0 6px 0;
-      font-size: 18px;
-      color: #222;
+      margin: 0 0 6px 0; /* 제목 여백 */
+      font-size: 18px;   /* 제목 크기 */
+      color: #222;       /* 글자색: 진회색 */
     }}
+    
     .section p {{
-      margin: 0;
-      color: #444;
-      line-height: 1.55;
+      margin: 0;         /* 문단 여백 제거 */
+      color: #444;       /* 글자색: 회색 */
+      line-height: 1.55; /* 줄 간격 */
     }}
+    
     .links {{
-      max-width: 960px;
-      margin: 18px auto 40px auto;
-      background: #f7f7fb;
-      border-left: 10px solid var(--accent);
-      padding: 14px 18px;
-      border-radius: 12px;
-      box-shadow: 0 6px 18px rgba(0,0,0,.06);
+      max-width: 960px;                       /* 링크 박스 너비 */
+      margin: 18px auto 40px auto;            /* 여백 + 가운데 정렬 */
+      background: #f7f7fb;                    /* 배경: 옅은 회색 */
+      border-left: 10px solid var(--accent);  /* 왼쪽 컬러 라인 */
+      padding: 14px 18px;                     /* 안쪽 여백 */
+      border-radius: 12px;                    /* 모서리 둥글게 */
+      box-shadow: 0 6px 18px rgba(0,0,0,.06); /* 그림자 */
     }}
+    
     .links a {{
-      display: inline-block;
-      margin-right: 12px;
+      display: inline-block;  /* 링크를 가로로 나열 */
+      margin-right: 12px;     /* 링크 간격 */
     }}
     </style>
     """,
-    unsafe_allow_html=True,
+    unsafe_allow_html=True,  # HTML/CSS를 실행 가능하게 설정
 )
 
-# 중앙 카드 렌더링 (기본 정보 키워드)
+# 중앙 카드 영역 표시
+# 선택된 신의 이름, 상징, 성격, 관계가 들어감
 st.markdown(
     f"""
-    <div class="card-wrap">
-        <div class="edge left">{info['edge_left']}</div>
-        <div class="edge right">{info['edge_right']}</div>
-        <div class="card">
-            <h2>{info['label']}</h2>
-            <p><b>상징:</b> {info['symbol']}</p>
-            <p><b>성격:</b> {info['personality']}</p>
-            <p><b>관계:</b> {info['relations']}</p>
+    <div class="card-wrap">   <!-- 카드 전체를 감싸는 컨테이너 -->
+        <div class="edge left">{info['edge_left']}</div>   <!-- 카드 왼쪽 장식 이모지 -->
+        <div class="edge right">{info['edge_right']}</div> <!-- 카드 오른쪽 장식 이모지 -->
+        <div class="card"> <!-- 실제 카드 본체 -->
+            <h2>{info['label']}</h2> <!-- 신 이름 (제우스, 헤라 등) -->
+            <p><b>상징:</b> {info['symbol']}</p>       <!-- 신의 상징 -->
+            <p><b>성격:</b> {info['personality']}</p>  <!-- 신의 성격 -->
+            <p><b>관계:</b> {info['relations']}</p>    <!-- 신의 가족/관계 -->
         </div>
     </div>
     """,
-    unsafe_allow_html=True,
+    unsafe_allow_html=True,  # HTML 태그 허용
 )
 
-# 카드 바깥: 항목별 설화 박스
-st.subheader("📚 다른 설화")
+# 카드 바깥쪽에 "설화 박스" 표시
+st.subheader("📚 다른 설화")  # 소제목 출력
+
+# 신화 항목들을 반복문으로 출력
 for section, text in info["myths"].items():
     st.markdown(
         f"""
-        <div class="section">
-            <h4>📖 {section}</h4>
-            <p>{text}</p>
+        <div class="section">  <!-- 설화 박스 -->
+            <h4>📖 {section}</h4> <!-- 예: 탄생 설화 / 대표적인 신화 -->
+            <p>{text}</p>          <!-- 해당 내용 -->
         </div>
         """,
-        unsafe_allow_html=True,
+        unsafe_allow_html=True,  # HTML 태그 허용
     )
 
 # 하단 참고 링크
